@@ -11,6 +11,6 @@ RUN python -m pip install --no-cache-dir . \
     && useradd --system --uid 10001 --no-create-home relay
 
 USER relay
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["python", "-m", "litellm_passthrough", "--config", "/app/relay.yaml"]

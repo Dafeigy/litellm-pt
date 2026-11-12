@@ -47,7 +47,7 @@ def load_config(path: str | Path) -> Config:
         data = _mapping(yaml.safe_load(file), "config")
     _keys(data, {"listen", "routes", "gateway_auth_headers"}, "config")
 
-    listen = data.get("listen", "127.0.0.1:3000")
+    listen = data.get("listen", "0.0.0.0:3001")
     if not isinstance(listen, str):
         raise ValueError("listen must be a host:port string")
     address = urlsplit("http://" + listen)
