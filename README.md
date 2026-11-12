@@ -16,6 +16,22 @@ python -m litellm_passthrough --config relay.yaml
 
 `GET /healthz` 返回服务健康状态。服务不记录完整 URL 或凭证，且默认关闭 Uvicorn 的访问日志，以免查询参数进入日志。
 
+### Docker Compose
+
+先复制路由配置，并将 `relay.yaml` 中的 `listen` 改为 `"0.0.0.0:3000"`，同时按需修改上游路由：
+
+```powershell
+Copy-Item relay.example.yaml relay.yaml
+# 编辑 relay.yaml：listen: "0.0.0.0:3000"
+docker compose up --build -d
+docker compose ps
+curl.exe http://127.0.0.1:3000/healthz
+```
+
+`Dockerfile` 构建仅包含本服务运行依赖的镜像；Compose 将本地 `relay.yaml` 只读挂载到容器，并检查 `/healthz`。配置文件改动后运行 `docker compose restart relay`；代码或依赖改动后运行 `docker compose up --build -d`。查看日志用 `docker compose logs -f relay`，停止用 `docker compose down`。
+
+Compose 只把端口发布到宿主机 `127.0.0.1:3000`。LiteLLM 运行在宿主机时，下面的 `target` 可直接使用。LiteLLM 也运行在容器中时，应使它与 `relay` 服务加入同一 Docker 网络，并将 `target` 改为 `http://relay:3000/deepseek`；容器内的 `127.0.0.1` 指向容器自身。只让可信的 LiteLLM 容器访问中转服务，不要把中转服务端口直接发布到公网。
+
 LiteLLM 的 `config.yaml` 中加入：
 
 ```yaml
