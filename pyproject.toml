@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "litellm-passthrough-relay"
+version = "0.1.0"
+description = "FastAPI relay for LiteLLM pass-through requests"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.110,<1",
+    "httpx>=0.27,<1",
+    "PyYAML>=6,<7",
+    "uvicorn>=0.29,<1",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+litellm-passthrough-relay = "litellm_passthrough.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

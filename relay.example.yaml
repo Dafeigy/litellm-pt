@@ -1,0 +1,8 @@
+listen: "127.0.0.1:3000"
+# Add any other gateway credential headers used by your LiteLLM deployment.
+gateway_auth_headers: []
+routes:
+  - prefix: "/deepseek"
+    upstream: "https://api.deepseek.com"
+    strip_prefix: true
+    timeout_seconds: 600
